@@ -22,16 +22,18 @@ None.
 1. Open the [Intune Portal](https://intune.microsoft.com/).
 
 2. Navigate to <b>Devices > Remediations</b>. Click the <b>Create script package</b> button.
+<img src="images/intune-remediation/intune-remediation_1.png">
 
 3. Name the script and give it a description that describes its usage.
+<img src="images/intune-remediation/intune-remediation_2.png">
 
 4. Add the detection and remediation scripts. Make sure you select to run in the 64-bit version of PowerShell.
+<img src="images/intune-remediation/intune-remediation_3.png">
 
 5. Assign the necessary scope. For this example, I will skip over it.
 
-6. Assign the necessary groups. Again, I will select none. Additionally, you can assign the frequency at which the remediation runs on devices.
-
-<em>(Images coming soon)</em>
+6. Assign the necessary groups. Again, I will select none. Additionally, you can assign the schedule at which the remediation runs on devices.
+<img src="images/intune-remediation/intune-remediation_4.png">
 
 ## Contributing
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
