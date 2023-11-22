@@ -11,7 +11,8 @@ function Get-PotPlayer {
     # if potplayer is not installed, return null; else return the install directory
     if (!(Test-Path -Path $installDir)) {
         return $null
-    } else {
+    }
+    else {
         return $installDir
     }
 }
@@ -19,21 +20,23 @@ function Get-PotPlayer {
 function Get-CurrentUserConfig {
     # under roaming appdata, there is a config file for potplayer. this is where the autoupdate setting is stored
     $configDir = Join-Path $env:APPDATA "PotPlayerMini64"
-    $configFile = (Get-ChildItem -Path $configDir -Filter "*.ini" -Recurse -ErrorAction SilentlyContinue)[0].FullName
+    # get all .ini files in the directory
+    $configFile = Get-ChildItem -Path $configDir -Filter "*.ini" -File -ErrorAction SilentlyContinue
 
-    # if config file does not exist, return null; else return the config file
-    if (!(Test-Path -Path $configFile)) {
+    # if no config file exists, return null; else return the config file
+    if (-NOT $configFile) {
         return $null
-    } else {
-        return $configFile
+    }
+    else {
+        return $configFile[0]
     }
 }
 
 function Get-ConfigValue {
     param (
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [string]$configFile,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$key
     )
 
@@ -44,7 +47,8 @@ function Get-ConfigValue {
         # if value is null, return null; else return the value after the equals sign
         if ($null -eq $value) {
             return $null
-        } else {
+        }
+        else {
             return $value.Split("=")[1]
         }
     }
@@ -59,6 +63,22 @@ if ($null -eq $installDir) {
 }
 
 $configFile = Get-CurrentUserConfig
+
+# if config file does not exist, exit 1; remediation is required
+if ($null -eq $configFile) {
+    Write-Host "PotPlayer config file does not exist on the device. Remediation is required." -ForegroundColor Red
+    exit 1
+}
 $autoUpdateValue = $configFile | Get-ConfigValue -key "CheckAutoUpdate"
 
-# finish this later
+# if does not exist or is set to 1, exit 1; remediation is required
+if ($null -eq $autoUpdateValue -or $autoUpdateValue -eq "1") {
+    Write-Host "PotPlayer autoupdate is enabled on the device. Remediation is required." -ForegroundColor Red
+    exit 1
+}
+
+# if set to 0, exit 0; remediation is not applicable
+if ($autoUpdateValue -eq "0") {
+    Write-Host "PotPlayer autoupdate is disabled on the device. Remediation is not applicable to this device." -ForegroundColor Green
+    exit 0
+}
