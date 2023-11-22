@@ -1,3 +1,6 @@
+# ----------------------------------------------------------------------------------------------------
+# THIS SCRIPT MUST BE RUN AS CURRENT USER. NOT SYSTEM (I think)
+# ----------------------------------------------------------------------------------------------------
 # File: detection.ps1
 # Description: This script is used to detect if PotPlayer autoupdate is enabled on the device. To be used in conjunction with the remediation script.
 # Author: Nicholas Tabb
@@ -28,7 +31,7 @@ function Get-CurrentUserConfig {
         return $null
     }
     else {
-        return $configFile[0]
+        return $configFile[0].FullName
     }
 }
 
