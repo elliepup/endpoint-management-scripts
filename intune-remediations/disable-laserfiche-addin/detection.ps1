@@ -2,7 +2,7 @@
 # Description: This script is used to detect if Laserfiche Office Plugin is enabled on the device. To be used in conjunction with the remediation script.
 #              Getting disabled because of a bug in the plugin that prevents apps from saving files on network shares.
 # Author: Nicholas Tabb
-# Date: 11/21/2023
+# Date: 11/29/2023
 # Version: 1.0 - Initial Release
 
 $keys = @(
