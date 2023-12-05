@@ -15,7 +15,25 @@ function Set-BitLockerEncryption {
         [string]$DesiredEncryptionMethod
     )
 
-    
+    try {
+        do {
+            # disable bitlocker
+            Disable-BitLocker -MountPoint "C:" -Confirm:$false
+            Start-Sleep -Seconds 5
+
+            # refresh bitlocker status
+            $bitlockerStatus = Get-BitLockerVolume -MountPoint "C:"
+        } while ($bitlockerStatus.VolumeStatus -ne "FullyDecrypted")
+
+        # enable bitlocker with desired encryption method
+        Enable-BitLocker -MountPoint "C:" -EncryptionMethod $DesiredEncryptionMethod -Confirm:$false
+
+        # next detection script execution will verify encryption method. this process can take a while depending on several factors
+    } catch {
+        Write-Host "Error: $_"
+        exit 1
+    }
+
 }
 
 
