@@ -14,6 +14,10 @@ $faultyModel = "21HES16Q00"
 # get the model of the device
 $model = (Get-WmiObject -Class Win32_ComputerSystem).Model
 
+# app we need to check for. this is typically installed by lenovo system update and causes issues with device locking
+# will check registry and uninstall if found
+$faultyAppName = "Elliptic Virtual Lock Sensor"
+
 function Get-LenovoBiosSetting {
     [CmdletBinding()]
     param (
@@ -32,8 +36,15 @@ function Get-LenovoBiosSetting {
     return $biosSetting
 }
 
+# check if the app is installed. if it is, remediation is applicable; exit 1
+function Get-SensorApp {
+    # get registry key where the display name contains the faulty app name
+    $sensorApp = Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object { $_.DisplayName -like "*$faultyAppName*" }
+    return $sensorApp
+}
+
 $lenovoBiosSetting = Get-LenovoBiosSetting -Property $property
-# if value is null, remediation is not applicable; exit 0
+# if value is null, remediation is not applicable because the device is not a lenovo device; exit 0
 if ($null -eq $lenovoBiosSetting) {
     Write-Host "Remediation is not applicable to this device."
     exit 0
@@ -47,11 +58,23 @@ if ($model -eq $faultyModel) {
 
 $lenovoBiosSettingValue = $lenovoBiosSetting.CurrentSetting.Split(",")[1]
 
-# if the current value is the desired value, remediation is not applicable; exit 0; else, exit 1
-if ($lenovoBiosSettingValue -eq $desiredValue) {
-    Write-Host "Device is already in the desired state. Remediation is not applicable to this device."
-    exit 0
+# these checks could've been combined, but I wanted to be verbose and provide more information in the logs
+# if the app is installed, remediation is applicable; exit 1
+$sensorApp = Get-SensorApp
+if ($null -ne $sensorApp) {
+    Write-Host "Faulty app detected. Remediation is applicable to this device."
+    exit 1
 } else {
+    Write-Host "Faulty app not detected. Remediation may not be applicable to this device."
+}
+
+# if the value is not the desired value, remediation is applicable; exit 1
+if ($lenovoBiosSettingValue -ne $desiredValue) {
     Write-Host "Device is not in the desired state. Remediation is applicable to this device."
     exit 1
+} else {
+    Write-Host "Device is already in the desired state. Remediation is not applicable to this device."
+    exit 0
 }
+
+exit 0
