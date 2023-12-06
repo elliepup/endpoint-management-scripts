@@ -96,13 +96,12 @@ if ($model -eq $faultyModel) {
 $lenovoBiosSettingValue = $lenovoBiosSetting.CurrentSetting.Split(",")[1]
 # if the current value is the desired value, remediation is not applicable; exit 0; else, perform remediation
 if ($lenovoBiosSettingValue -eq $desiredValue) {
-    Write-Host "Device is already in the desired state. Remediation is not applicable to this device."
-    exit 0
+    Write-Host "Device is already in the desired state, however, the faulty app may still be installed."
+} else {
+    # perform remediation
+    Write-Host "Device is not in the desired state, performing remediation..."
+    Set-LenovoBiosSetting -property $property -value $desiredValue
 }
-
-# perform remediation
-Write-Host "Remediating..."
-Set-LenovoBiosSetting -property $property -value $desiredValue
 
 # if the app is installed, uninstall it
 $sensorApp = Get-SensorApp
