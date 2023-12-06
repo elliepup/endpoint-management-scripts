@@ -15,6 +15,7 @@ $faultyModel = "21HES16Q00"
 # get the model of the device
 $model = (Get-WmiObject -Class Win32_ComputerSystem).Model
 
+$faultyAppName = "Elliptic Virtual Lock Sensor"
 # double check that the device is a lenovo and that remediation is applicable
 function Get-LenovoBiosSetting {
     [CmdletBinding()]
@@ -57,6 +58,27 @@ function Set-LenovoBiosSetting {
     }
 }
 
+# check if the app is installed. if it is, remediation is applicable; exit 1
+function Get-SensorApp {
+    # get registry key where the display name contains the faulty app name
+    $sensorApp = Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object { $_.DisplayName -like "*$faultyAppName*" }
+    return $sensorApp
+}
+
+function Uninstall-SensorApp {
+    # get the uninstall string from the registry
+    $sensorApp = Get-SensorApp
+
+    # replace the /I with /X to uninstall the app
+    $guid = $sensorApp.PSChildName
+    $argList = @(
+        '/X'
+        $guid
+        '/qn'
+    )
+    Start-Process msiexec.exe -ArgumentList $argList -Wait
+}
+
 $lenovoBiosSetting = Get-LenovoBiosSetting -Property $property
 
 # if value is null, remediation is not applicable; exit 0
@@ -81,6 +103,13 @@ if ($lenovoBiosSettingValue -eq $desiredValue) {
 # perform remediation
 Write-Host "Remediating..."
 Set-LenovoBiosSetting -property $property -value $desiredValue
+
+# if the app is installed, uninstall it
+$sensorApp = Get-SensorApp
+if ($null -ne $sensorApp) {
+    Write-Host "Faulty app detected. Uninstalling..."
+    Uninstall-SensorApp
+}
 
 # computer will need to be restarted for changes to take effect, but we will exit 0 anyway to not affect the user
 exit 0
