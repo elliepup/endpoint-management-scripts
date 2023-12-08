@@ -12,8 +12,10 @@ $desiredValue = "Disable"
 # due to a bug made by lenovo in one of the generations of their devices, the value may be inverted; 
 #this is the model that is affected. the rest are not (as far as we know)
 $faultyModel = "21HES16Q00"
+$faultyBiosVersions = @("N3QET37W (1.37 )", "N3QET38W (1.38 )", "N3QET39W (1.39 )")
 # get the model of the device
 $model = (Get-WmiObject -Class Win32_ComputerSystem).Model
+$biosVersion = (Get-WmiObject -Class Win32_BIOS).SMBIOSBIOSVersion
 
 $faultyAppName = "Elliptic Virtual Lock Sensor"
 # double check that the device is a lenovo and that remediation is applicable
@@ -88,7 +90,7 @@ if ($null -eq $lenovoBiosSetting) {
 }
 
 # if the model is the faulty model, alter the desired value
-if ($model -eq $faultyModel) {
+if ($model -eq $faultyModel -and $faultyBiosVersions -contains $biosVersion) {
     $desiredValue = "Enable"
     Write-Host "Faulty model detected. Desired value has been altered to $desiredValue."
 }
