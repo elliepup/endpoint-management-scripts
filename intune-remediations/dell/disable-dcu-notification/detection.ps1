@@ -9,7 +9,7 @@ $property = "ScheduleMode"
 $path = "HKLM:\SOFTWARE\Dell\UpdateService\Clients\CommandUpdate\Preferences\Settings\Schedule"
 $desiredValue = "ManualUpdates"
 
-check if machine is a Dell
+# check if machine is a Dell
 $manufacturer = (Get-WmiObject -Class Win32_ComputerSystem).Manufacturer
 if ($manufacturer -ne "Dell Inc.") {
     Write-Host "This machine is not a Dell. Remediation is not applicable."
