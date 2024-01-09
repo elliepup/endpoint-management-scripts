@@ -1,4 +1,4 @@
-# File: detection.ps1
+# File: remediation.ps1
 # Description: This script uninstalls Lenovo System Update. To be used in conjunction with uninstall-lenovo-system-update/detection.ps1.
 # Author: Nicholas Tabb
 # Date: 01/09/2023
