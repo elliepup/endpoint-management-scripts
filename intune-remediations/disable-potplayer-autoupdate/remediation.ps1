@@ -2,7 +2,7 @@
 # Description: This script is used to disable PotPlayer autoupdate on the device. To be used in conjunction with the detection script.
 # Author: Nicholas Tabb
 # Date: 11/22/2023
-# Version: 1.0 - Initial Release
+# Version: 1.1 -> bug fix
 
 # confirm potplayer is installed
 function Get-PotPlayer {
@@ -19,6 +19,12 @@ function Get-PotPlayer {
 function Get-CurrentUserConfig {
     # under roaming appdata, there is a config file for potplayer. this is where the autoupdate setting is stored
     $configDir = Join-Path $env:APPDATA "PotPlayerMini64"
+
+    # if the directory does not exist, create it
+    if (!(Test-Path -Path $configDir)) {
+        New-Item -Path $configDir -ItemType Directory | Out-Null
+    }
+
     # get all .ini files in the directory
     $configFile = Get-ChildItem -Path $configDir -Filter "*.ini" -File -ErrorAction SilentlyContinue
 
