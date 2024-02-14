@@ -11,7 +11,7 @@ $property = "UserPresenceSensing"
 $desiredValue = "Disable"
 # due to a bug made by lenovo in one of the generations of their devices, the value may be inverted; this is the model that is affected. the rest are not (as far as we know)
 $faultyModel = "21HES16Q00"
-$faultyBiosVersions = @("N3QET37W (1.37 )", "N3QET38W (1.38 )", "N3QET39W (1.39 )")
+$faultyBiosVersions = @("N3QET37W (1.37 )", "N3QET38W (1.38 )", "N3QET39W (1.39 )", "N3QET40W (1.40 )")
 # get the model of the device
 $model = (Get-WmiObject -Class Win32_ComputerSystem).Model
 $biosVersion = (Get-WmiObject -Class Win32_BIOS).SMBIOSBIOSVersion
