@@ -55,4 +55,5 @@ $properties | Get-LenovoBiosSetting | ForEach-Object {
     }
 }
 
-exit 1
+Write-Host "Computer is in desired state. Exiting."
+exit 0
