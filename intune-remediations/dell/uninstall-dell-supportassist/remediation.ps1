@@ -11,46 +11,49 @@ $applicationNames = @("Dell SupportAssist", "Dell SupportAssist Remediation", "D
 
 function Get-UninstallString {
     param (
-        [Parameter(Mandatory = $true)]
-        [string]$softwareName
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [string[]]$softwareName
     )
 
-    # get the uninstall string from the registry
-    $registryPaths = @(
-        "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*",
-        "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
-    )
+    begin {
+        $registryPaths = @(
+            "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*",
+            "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
+        )
 
-    # search for the uninstall string in the registry
-    foreach ($registryPath in $registryPaths) {
-        $uninstallString = Get-ItemProperty -Path $registryPath | Where-Object { $applicationNames -contains $_.DisplayName } | Select-Object -ExpandProperty UninstallString
+        $uninstallStrings = @()
+    }
 
-        if ($uninstallString) {
-            return $uninstallString
-        }
+    process {
+        $uninstallStrings += Get-ItemProperty -Path $registryPaths | Where-Object { $softwareName -contains $_.DisplayName } | Select-Object -ExpandProperty UninstallString
+    }
+
+    end {
+        return $uninstallStrings
     }
 }
 
 function Uninstall-Application {
     param (
-        [Parameter(Mandatory = $true)]
-        [string]$uninstallString
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [string[]]$uninstallString
     )
 
-    # replace the /I flag with the /X flag to uninstall the application and append the /qn
-    $uninstallString = $uninstallString -replace "/I", "/X" -replace "/i", "/X"
-    $uninstallString = "$uninstallString /qn"
-    
-    # uninstall the application using cmd
-    cmd /c $uninstallString
+    process {
+        $uninstallString = $uninstallString -replace "/I", "/X"
+        $uninstallString = $uninstallString + " /qn"
+
+        cmd /c $uninstallString
+    }
 }
 
-# get the uninstall string(s) for the application
-foreach ($applicationName in $applicationNames) {
-    $uninstallString = Get-UninstallString -softwareName $applicationName
+$applicationNames | Get-UninstallString | Uninstall-Application
 
-    if ($uninstallString) {
-        Write-Host "Uninstalling $applicationName..."
-        Uninstall-Application -uninstallString $uninstallString
-    }
+# double check if the application is uninstalled
+$uninstallString = $applicationNames | Get-UninstallString
+if ($uninstallString) {
+    Write-Host "Failed to uninstall Dell SupportAssist."
+    exit 1
+} else {
+    Write-Host "Dell SupportAssist has been uninstalled."
 }
