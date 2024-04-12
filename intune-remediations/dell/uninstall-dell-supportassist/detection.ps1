@@ -25,7 +25,9 @@ function Get-UninstallString {
     }
 
     process {
-        $uninstallStrings += Get-ItemProperty -Path $registryPaths | Where-Object { $softwareName -contains $_.DisplayName } | Select-Object -ExpandProperty UninstallString
+        $uninstallStrings += Get-ItemProperty -Path $registryPaths | 
+        Where-Object { $softwareName -contains $_.DisplayName } | 
+        Select-Object -ExpandProperty UninstallString
     }
 
     end {
@@ -35,8 +37,8 @@ function Get-UninstallString {
 
 $uninstallString = $applicationNames | Get-UninstallString
 if ($uninstallString) {
-    Write-Host "Dell SupportAssist is installed. Remediation is required."
+    Write-Host "Dell SupportAssist is installed. Remediation is required." -ForegroundColor Red
     exit 1
 } else {
-    Write-Host "Dell SupportAssist is not installed. Remediation is not applicable".
+    Write-Host "Dell SupportAssist is not installed. Remediation is not applicable." -ForegroundColor Green
 }

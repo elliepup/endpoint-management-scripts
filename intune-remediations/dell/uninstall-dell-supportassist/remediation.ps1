@@ -4,12 +4,11 @@
 # Date: 04/11/2024
 # Version: 1.0
 
-# first time writing making a configuration baseline so this may not work lol
 # --------------------------- Modify As Necessary ------------------------------- #
 $applicationNames = @("Dell SupportAssist", "Dell SupportAssist Remediation", "Dell SupportAssist OS Recovery Plugin for Dell Update")
 # ------------------------------------------------------------------------------- #
 
-function Get-UninstallString {
+function Get-RegistryKey {
     param (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [string[]]$softwareName
@@ -17,15 +16,16 @@ function Get-UninstallString {
 
     begin {
         $registryPaths = @(
-            "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*",
+            "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
             "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
         )
-
         $uninstallStrings = @()
     }
 
     process {
-        $uninstallStrings += Get-ItemProperty -Path $registryPaths | Where-Object { $softwareName -contains $_.DisplayName } | Select-Object -ExpandProperty UninstallString
+        $uninstallStrings += Get-ItemProperty -Path $registryPaths | 
+        Where-Object { $softwareName -contains $_.DisplayName } | 
+        Select-Object DisplayName,UninstallString,QuietUninstallString
     }
 
     end {
@@ -36,24 +36,37 @@ function Get-UninstallString {
 function Uninstall-Application {
     param (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [string[]]$uninstallString
+        [System.Object[]]$registryKey
     )
 
     process {
-        $uninstallString = $uninstallString -replace "/I", "/X"
-        $uninstallString = $uninstallString + " /qn"
+        # if there exists a quiet uninstall string, use it
+        if ($registryKey.QuietUninstallString) {
+            $uninstallString = $registryKey.QuietUninstallString
+        } else {
+            $uninstallString = $registryKey.UninstallString -replace '/I', '/X'
+            $uninstallString += ' /qn'
+        }
 
-        cmd /c $uninstallString
+        Start-Process "cmd.exe" -ArgumentList "/c $uninstallString" -Wait -NoNewWindow
+        
     }
 }
 
-$applicationNames | Get-UninstallString | Uninstall-Application
 
-# double check if the application is uninstalled
-$uninstallString = $applicationNames | Get-UninstallString
-if ($uninstallString) {
-    Write-Host "Failed to uninstall Dell SupportAssist."
-    exit 1
+
+$registryKeys = $applicationNames | Get-RegistryKey
+# if there are two registry keys specifically for the os recovery plugin, only keep the one that contains a quiet uninstall string
+if (($registryKeys | Where-Object { $_.DisplayName -eq $applicationNames[2] }).Count -eq 2) {
+    $registryKeys = $registryKeys | Where-Object { $_.DisplayName -ne $applicationNames[2] -or $_.QuietUninstallString -ne $null }
+}
+
+$registryKeys | Uninstall-Application
+
+# check if any of the applications are still installed for logging purposes
+$uninstallStrings = $applicationNames | Get-RegistryKey
+if ($uninstallStrings) {
+    Write-Host "Dell SupportAssist is still installed." -ForegroundColor Red
 } else {
-    Write-Host "Dell SupportAssist has been uninstalled."
+    Write-Host "Dell SupportAssist has been uninstalled." -ForegroundColor Green
 }
