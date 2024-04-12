@@ -19,17 +19,17 @@ function Get-RegistryKey {
             "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
             "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
         )
-        $uninstallStrings = @()
+        $registryKeys = @()
     }
 
     process {
-        $uninstallStrings += Get-ItemProperty -Path $registryPaths | 
+        $registryKeys += Get-ItemProperty -Path $registryPaths | 
         Where-Object { $softwareName -contains $_.DisplayName } | 
         Select-Object DisplayName,UninstallString,QuietUninstallString
     }
 
     end {
-        return $uninstallStrings
+        return $registryKeys
     }
 }
 
@@ -64,8 +64,8 @@ if (($registryKeys | Where-Object { $_.DisplayName -eq $applicationNames[2] }).C
 $registryKeys | Uninstall-Application
 
 # check if any of the applications are still installed for logging purposes
-$uninstallStrings = $applicationNames | Get-RegistryKey
-if ($uninstallStrings) {
+$registryKeys = $applicationNames | Get-RegistryKey
+if ($registryKeys) {
     Write-Host "Dell SupportAssist is still installed." -ForegroundColor Red
 } else {
     Write-Host "Dell SupportAssist has been uninstalled." -ForegroundColor Green

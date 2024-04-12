@@ -9,7 +9,7 @@
 $applicationNames = @("Dell SupportAssist", "Dell SupportAssist Remediation", "Dell SupportAssist OS Recovery Plugin for Dell Update")
 # ------------------------------------------------------------------------------- #
 
-function Get-UninstallString {
+function Get-RegistryKey {
     param (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [string[]]$softwareName
@@ -17,28 +17,28 @@ function Get-UninstallString {
 
     begin {
         $registryPaths = @(
-            "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*",
+            "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
             "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
         )
-
-        $uninstallStrings = @()
+        $registryKeys = @()
     }
 
     process {
-        $uninstallStrings += Get-ItemProperty -Path $registryPaths | 
+        $registryKeys += Get-ItemProperty -Path $registryPaths | 
         Where-Object { $softwareName -contains $_.DisplayName } | 
-        Select-Object -ExpandProperty UninstallString
+        Select-Object DisplayName,UninstallString,QuietUninstallString
     }
 
     end {
-        return $uninstallStrings
+        return $registryKeys
     }
 }
 
-$uninstallString = $applicationNames | Get-UninstallString
-if ($uninstallString) {
-    Write-Host "Dell SupportAssist is installed. Remediation is required." -ForegroundColor Red
-    exit 1
+$registryKeys = $applicationNames | Get-RegistryKey
+
+if ($registryKeys) {
+    # output displayname of installed application(s) same line
+    Write-Host "Found unwanted applications: $($registryKeys.DisplayName -join ', ')" -ForegroundColor Red
 } else {
-    Write-Host "Dell SupportAssist is not installed. Remediation is not applicable." -ForegroundColor Green
+    Write-Output "Dell SupportAssist is not installed." -ForegroundColor Green
 }
