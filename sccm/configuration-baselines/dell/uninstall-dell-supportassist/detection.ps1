@@ -1,7 +1,7 @@
 # File: uninstall-dell-supportassist/detection.ps1
 # Description: This script checks if Dell SupportAssist is installed on the device.
 # Author: Nicholas Tabb
-# Date: 04/11/2024
+# Date: 04/15/2024
 # Version: 1.0
 
 # --------------------------- Modify As Necessary ------------------------------- #
@@ -35,10 +35,8 @@ function Get-RegistryKey {
 
 $registryKeys = $applicationNames | Get-RegistryKey
 
+# if keys are found, write to standard output; else do nothing.
+# this is how configuration baselines determine compliance.
 if ($registryKeys) {
     Write-Host "Found unwanted applications: $($registryKeys.DisplayName -join ', ')" -ForegroundColor Red
-    exit 1
-} else {
-    Write-Output "Dell SupportAssist is not installed." -ForegroundColor Green
-    exit 0
 }
