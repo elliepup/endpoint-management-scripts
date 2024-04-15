@@ -48,8 +48,11 @@ function Uninstall-Application {
             $uninstallString += ' /qn'
         }
 
-        Start-Process "cmd.exe" -ArgumentList "/c $uninstallString" -Wait -NoNewWindow
-        
+        try {
+            Start-Process "cmd.exe" -ArgumentList "/c $uninstallString" -Wait -NoNewWindow
+        } catch {
+            Write-Host "An error occurred while uninstalling the application: $_" -ForegroundColor Red
+        }
     }
 }
 
