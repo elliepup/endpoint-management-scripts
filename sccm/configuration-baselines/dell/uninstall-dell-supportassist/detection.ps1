@@ -35,8 +35,5 @@ function Get-RegistryKey {
 
 $registryKeys = $applicationNames | Get-RegistryKey
 
-# if keys are found, write to standard output; else do nothing.
-# this is how configuration baselines determine compliance.
-if ($registryKeys) {
-    Write-Host "Found unwanted applications: $($registryKeys.DisplayName -join ', ')" -ForegroundColor Red
-}
+# if Dell SupportAssist is installed, return true
+return ($null -ne $registryKeys)
