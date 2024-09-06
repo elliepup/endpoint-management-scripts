@@ -14,6 +14,8 @@ Context        : Computer (System)
 #>
 
 $applicationName = "Teams Machine-Wide Installer"
+
+# ----- do not modify below this line (unless you know what you are doing) ----- #
 function Get-RegistryKey {
     <#
     .SYNOPSIS

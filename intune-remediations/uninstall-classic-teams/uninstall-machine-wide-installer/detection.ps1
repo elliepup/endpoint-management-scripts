@@ -16,6 +16,9 @@ Context        : Computer (System)
 
 $requireNewTeams = $true # Set to $true to check for the existence of new Teams. This means that remediation will not be required if new Teams is not present.
 $applicationName = "Teams Machine-Wide Installer"
+
+
+# ----- do not modify below this line (unless you know what you are doing) ----- #
 function Get-RegistryKey {
     <#
     .SYNOPSIS
@@ -50,6 +53,15 @@ function Get-RegistryKey {
 }
 
 function Confirm-NewTeamsExists {
+    <#
+    .SYNOPSIS
+    Confirms that the new Teams application is installed.
+    .DESCRIPTION
+    Confirms that the new Teams application is installed by searching for the application name. If the application is not found, the script will exit with a status of 0.
+    .EXAMPLE
+    Confirm-NewTeamsExists
+    Searches for the new Teams application.
+    #>
     $appName = "MSTeams"
     $newTeams = Get-AppxPackage -AllUsers | Where-Object { $_.Name -eq $appName }
 
