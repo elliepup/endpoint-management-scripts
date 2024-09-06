@@ -6,7 +6,13 @@ I created two separate remediations because one runs in the context of the syste
 Although you _technically_ can uninstall per-user Teams instances in the system context, I ran into several issues with it not cleaning up the user profile correctly. It would leave behind shortcuts and Teams would remain in Add/Remove Programs. I would fix this programmatically, but that's a lot of work for something that can be done with a simple script.
 
 ## How to Use
-Same way as any other remediation. See the main readme for more information on how to use these scripts. Make sure that for the per-user remediation you select to run in the user context, **or it will not work.**
+With the detection scripts,
+you can specify if you want to confirm that new Teams is already installed before running the uninstaller.
+This is useful
+if you want to ensure that you're not uninstalling Teams on a device that doesn't have the new version installed yet.
+Aside from that, it is implemented the same way as any other remediation.
+See the main readme for more information on how to use these scripts.
+Make sure that for the per-user remediation you select to run in the user context, **or it will not work.**
 
 If you need help understanding or implementing this, feel free to reach out to me. I'm always happy to help. My contact info can be found on the main readme.
 
