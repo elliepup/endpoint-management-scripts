@@ -53,7 +53,7 @@ Nicholas Tabb [thechiefnick](https://www.discord.com) - admin@chiefnick.com
 
 Project Link: [https://github.com/elliepup/endpoint-management-scripts](https://github.com/elliepup/endpoint-management-scripts)
 
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/elliepup/endpoint-management-scripts.svg?style=for-the-badge
 [license-url]: https://github.com/elliepup/endpoint-management-scripts/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/nicholas-tabb-30800b232
