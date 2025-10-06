@@ -1,4 +1,4 @@
-<h1 align="center">🚀 Endpoint Management Scripts 🚀</h1>
+<h1 align="center">Endpoint Management Scripts</h1>
 
 <p align="center">
     <a href="https://www.linkedin.com/in/nicholas-tabb-30800b232"><img src="https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555" alt="LinkedIn"></a>
@@ -7,13 +7,13 @@
 
 ---
 
-## ✨ About
+## About
 
 This repository is a collection of **PowerShell scripts** for **Intune remediations** and **SCCM configuration baselines**. It mainly consists of the more commonly used ones in my work as a systems administrator.
 
 ---
 
-## ⚡ Getting Started
+## Getting Started
 
 To get a local copy up and running, follow these simple steps.
 
@@ -29,7 +29,7 @@ git clone https://github.com/elliepup/endpoint-management-scripts.git
 
 ---
 
-## 🛠️ Usage
+## Usage
 
 1. Open the [Intune Portal](https://intune.microsoft.com/).
 2. Navigate to `Devices > Remediations` → <kbd>Create script package</kbd>
@@ -44,7 +44,7 @@ git clone https://github.com/elliepup/endpoint-management-scripts.git
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Open source thrives on collaboration!  
 **How to contribute:**
@@ -65,17 +65,17 @@ git push origin feature/AmazingFeature
 
 ---
 
-## 📄 License
+## License
 
 Distributed under the MIT License.  
 See [`LICENSE`](LICENSE) for details.
 
 ---
 
-## 📬 Contact
+## Contact
 
 **Nicholas Tabb**  
 [Discord: thechiefnick](https://www.discord.com)  
-✉️ admin@chiefnick.com
+admin@chiefnick.com
 
 **Project Link:** [elliepup/endpoint-management-scripts](https://github.com/elliepup/endpoint-management-scripts)
