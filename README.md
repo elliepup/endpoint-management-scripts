@@ -1,59 +1,81 @@
-# Endpoint Management Scripts
+<h1 align="center">Endpoint Management Scripts</h1>
 
-[![LinkedIn][linkedin-shield]][linkedin-url]
-[![MIT License][license-shield]][license-url]
+<p align="center">
+    <a href="https://www.linkedin.com/in/nicholas-tabb-30800b232"><img src="https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555" alt="LinkedIn"></a>
+    <a href="https://github.com/elliepup/endpoint-management-scripts/blob/main/LICENSE"><img src="https://img.shields.io/github/license/elliepup/endpoint-management-scripts.svg?style=for-the-badge" alt="MIT License"></a>
+</p>
+
+---
 
 ## About
-This repository is a collection of PowerShell scripts for Intune remediations and SCCM configuration baselines. It mainly consists of the more commonly used ones in my work as a systems administrator.
+
+This repository is a collection of **PowerShell scripts** for **Intune remediations** and **SCCM configuration baselines**. It mainly consists of the more commonly used ones in my work as a systems administrator.
+
+---
 
 ## Getting Started
+
 To get a local copy up and running, follow these simple steps.
 
-
-
 ### Prerequisites
-None.
+
+> None.
 
 ### Installation
-1. Clone the repo
 
+```bash
+git clone https://github.com/elliepup/endpoint-management-scripts.git
+```
+
+---
 
 ## Usage
+
 1. Open the [Intune Portal](https://intune.microsoft.com/).
+2. Navigate to `Devices > Remediations` → <kbd>Create script package</kbd>
+     <br><img src="images/intune-remediation/intune-remediation_1.png" width="500">
+3. Give your script a meaningful name and description.
+     <br><img src="images/intune-remediation/intune-remediation_2.png" width="500">
+4. Upload detection & remediation scripts. Select **64-bit PowerShell**.
+     <br><img src="images/intune-remediation/intune-remediation_3.png" width="500">
+5. Assign Scope: (Optional) Choose scope tags.
+6. Select target groups and set the remediation schedule.
+     <br><img src="images/intune-remediation/intune-remediation_4.png" width="500">
 
-2. Navigate to <b>Devices > Remediations</b>. Click the <b>Create script package</b> button.
-<img src="images/intune-remediation/intune-remediation_1.png">
-
-3. Name the script and give it a description that describes its usage.
-<img src="images/intune-remediation/intune-remediation_2.png">
-
-4. Add the detection and remediation scripts. Make sure you select to run in the 64-bit version of PowerShell.
-<img src="images/intune-remediation/intune-remediation_3.png">
-
-5. Assign the necessary scope. For this example, I will skip over it.
-
-6. Assign the necessary groups. Again, I will select none. Additionally, you can assign the schedule at which the remediation runs on devices.
-<img src="images/intune-remediation/intune-remediation_4.png">
+---
 
 ## Contributing
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Open source thrives on collaboration!  
+**How to contribute:**
 
+```bash
+# 1. Fork the repo
+# 2. Create your feature branch
+git checkout -b feature/AmazingFeature
+
+# 3. Commit your changes
+git commit -m "Add some AmazingFeature"
+
+# 4. Push to your branch
+git push origin feature/AmazingFeature
+
+# 5. Open a Pull Request
+```
+
+---
 
 ## License
-Distributed under the MIT License. See `LICENSE` for more information.
+
+Distributed under the MIT License.  
+See [`LICENSE`](LICENSE) for details.
+
+---
 
 ## Contact
-Nicholas Tabb [thechiefnick](https://www.discord.com) - admin@chiefnick.com
 
-Project Link: [https://github.com/elliepup/endpoint-management-scripts](https://github.com/elliepup/endpoint-management-scripts)
+**Nicholas Tabb**  
+[Discord: thechiefnick](https://www.discord.com)  
+admin@chiefnick.com
 
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/elliepup/endpoint-management-scripts/blob/main/LICENSE
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/in/nicholas-tabb-30800b232
+**Project Link:** [elliepup/endpoint-management-scripts](https://github.com/elliepup/endpoint-management-scripts)
